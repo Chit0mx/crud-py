@@ -316,79 +316,74 @@ def actualizar_lista():
 ventana = tk.Tk()
 ventana.title("Concurso")
 
+#Frame de busqueda y listado
+frame_lista = tk.Frame(ventana)
+frame_lista.grid(row=0, column=6, columnspan=9, padx=5, pady=5)
+
+# Crear la etiqueta y el campo de búsqueda
+entry_buscar = tk.Entry(frame_lista)
+entry_buscar.grid(row=0, column=0, padx=5, pady=5)
+boton_buscar = tk.Button(frame_lista, text="Buscar", command=buscar_registro)
+boton_buscar.grid(row=0, column=1, padx=5, pady=5)
+
+# Crear la lista de participantes
+lista = tk.Listbox(frame_lista, width=80)
+lista.grid(row=1, column=2, padx=5, pady=5)
+
+# Asociar la función mostrar_datos al evento de selección en la lista
+lista.bind("<<ListboxSelect>>", mostrar_datos)
+
 # Crear los campos de entrada
+label_nombre = tk.Label(ventana, text="Nombre:")
+label_nombre.grid(row=0, column=0, padx=5, pady=5, sticky="e")
 entry_nombre = tk.Entry(ventana)
 entry_nombre.grid(row=0, column=1, padx=5, pady=5)
 
+label_apellido_paterno = tk.Label(ventana, text="Apellido Paterno:")
+label_apellido_paterno.grid(row=1, column=0, padx=5, pady=5, sticky="e")
 entry_apellido_paterno = tk.Entry(ventana)
 entry_apellido_paterno.grid(row=1, column=1, padx=5, pady=5)
 
+label_apellido_materno = tk.Label(ventana, text="Apellido Materno:")
+label_apellido_materno.grid(row=2, column=0, padx=5, pady=5, sticky="e")
 entry_apellido_materno = tk.Entry(ventana)
 entry_apellido_materno.grid(row=2, column=1, padx=5, pady=5)
 
+label_edad = tk.Label(ventana, text="Edad:")
+label_edad.grid(row=3, column=0, padx=5, pady=5, sticky="e")
 entry_edad = tk.Entry(ventana)
 entry_edad.grid(row=3, column=1, padx=5, pady=5)
 
+label_sexo = tk.Label(ventana, text="Sexo:")
+label_sexo.grid(row=4, column=0, padx=5, pady=5, sticky="e")
 entry_sexo = tk.Entry(ventana)
 entry_sexo.grid(row=4, column=1, padx=5, pady=5)
 
-entry_escuela = tk.Entry(ventana)
-entry_escuela.grid(row=5, column=1, padx=5, pady=5)
-
-entry_direccion = tk.Entry(ventana)
-entry_direccion.grid(row=6, column=1, padx=5, pady=5)
-
+label_curp = tk.Label(ventana, text="CURP:")
+label_curp.grid(row=5, column=0, padx=5, pady=5, sticky="e")
 entry_curp = tk.Entry(ventana)
-entry_curp.grid(row=7, column=1, padx=5, pady=5)
+entry_curp.grid(row=5, column=1, padx=5, pady=5)
 
-# entry_categoria = tk.Entry(ventana)
-# entry_categoria.grid(row=8, column=1, padx=5, pady=5)
+label_escuela = tk.Label(ventana, text="Escuela:")
+label_escuela.grid(row=6, column=0, padx=5, pady=5, sticky="e")
+entry_escuela = tk.Entry(ventana)
+entry_escuela.grid(row=6, column=1, padx=5, pady=5)
 
-label_categoria = ttk.Label(ventana, text="Categoría:")
-label_categoria.grid(row=8, column=0, padx=5, pady=5)
+label_direccion = tk.Label(ventana, text="Dirección:")
+label_direccion.grid(row=7, column=0, padx=5, pady=5, sticky="e")
+entry_direccion = tk.Entry(ventana)
+entry_direccion.grid(row=7, column=1, padx=5, pady=5)
+
+label_categoria = tk.Label(ventana, text="Categoría:")
+label_categoria.grid(row=8, column=0, padx=5, pady=5, sticky="e")
 categoria_var = tk.StringVar()
 entry_categoria = ttk.Combobox(ventana, textvariable=categoria_var)
 entry_categoria["values"] = ("Novatos", "Avanzados", "Libre")
 entry_categoria.grid(row=8, column=1, padx=5, pady=5)
 
-# Crear etiquetas para los campos de entrada
-label_nombre = tk.Label(ventana, text="Nombre:")
-label_nombre.grid(row=0, column=0, padx=5, pady=5, sticky="e")
-
-label_apellido_paterno = tk.Label(ventana, text="Apellido Paterno:")
-label_apellido_paterno.grid(row=1, column=0, padx=5, pady=5, sticky="e")
-
-label_apellido_materno = tk.Label(ventana, text="Apellido Materno:")
-label_apellido_materno.grid(row=2, column=0, padx=5, pady=5, sticky="e")
-
-label_edad = tk.Label(ventana, text="Edad:")
-label_edad.grid(row=3, column=0, padx=5, pady=5, sticky="e")
-
-label_sexo = tk.Label(ventana, text="Sexo:")
-label_sexo.grid(row=4, column=0, padx=5, pady=5, sticky="e")
-
-label_escuela = tk.Label(ventana, text="Escuela:")
-label_escuela.grid(row=5, column=0, padx=5, pady=5, sticky="e")
-
-label_direccion = tk.Label(ventana, text="Dirección:")
-label_direccion.grid(row=6, column=0, padx=5, pady=5, sticky="e")
-
-label_curp = tk.Label(ventana, text="CURP:")
-label_curp.grid(row=7, column=0, padx=5, pady=5, sticky="e")
-
-label_categoria = tk.Label(ventana, text="Categoría:")
-label_categoria.grid(row=8, column=0, padx=5, pady=5, sticky="e")
-
-# Crear la lista de participantes
-lista = tk.Listbox(ventana, width=50)
-lista.grid(row=0, column=2, rowspan=9, padx=5, pady=5)
-
-# Asociar la función mostrar_datos al evento de selección en la lista
-lista.bind("<<ListboxSelect>>", mostrar_datos)
-
 # Crear los botones
 frame_botones = tk.Frame(ventana)
-frame_botones.grid(row=9, column=0, columnspan=4, padx=5, pady=5)
+frame_botones.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
 
 boton_agregar = tk.Button(frame_botones, text="Agregar", command=agregar_participante)
 boton_agregar.grid(row=0, column=0, padx=5)
@@ -402,25 +397,18 @@ boton_eliminar.grid(row=0, column=2, padx=5)
 boton_eliminar = tk.Button(frame_botones, text="Limpiar", command=limpiar_campos)
 boton_eliminar.grid(row=0, column=3, padx=5)
 
-boton_pdf = tk.Button(frame_botones, text="Exportar registro .pdf", command=generar_pdf)
-boton_pdf.grid(row=0, column=4, padx=5)
+boton_pdf = tk.Button(frame_botones, text="PDF", command=generar_pdf)
+boton_pdf.grid(row=1, column=0, padx=5)
 
-boton_exportar = tk.Button(ventana, text="Exportar registro .txt", command=exportar_registro)
-boton_exportar.grid(row=9, column=0,padx=5, pady=5)
+boton_exportar = tk.Button(frame_botones, text="TXT", command=exportar_registro)
+boton_exportar.grid(row=1, column=1,padx=5, pady=5)
 
-boton_exportar_docx = tk.Button(ventana, text="Exportar registro .docx", command=exportar_registro_docx)
-boton_exportar_docx.grid(row=10, column=0, columnspan=3, padx=5, pady=5)
+boton_exportar_docx = tk.Button(frame_botones, text="DOCX", command=exportar_registro_docx)
+boton_exportar_docx.grid(row=1, column=2, padx=5, pady=5)
 
-boton_generar_reconocimiento = tk.Button(ventana, text="Generar Reconocimiento", command=generar_reconocimiento)
-boton_generar_reconocimiento.grid(row=11, column=0, columnspan=3, padx=5, pady=5)
+boton_generar_reconocimiento = tk.Button(frame_botones, text="Participación", command=generar_reconocimiento)
+boton_generar_reconocimiento.grid(row=1, column=3, padx=5, pady=5)
 
-# Crear la etiqueta y el campo de búsqueda
-label_buscar = ttk.Label(ventana, text="Buscar por nombre:")
-label_buscar.grid(row=0, column=3, padx=5, pady=5)
-entry_buscar = ttk.Entry(ventana)
-entry_buscar.grid(row=0, column=4, padx=5, pady=5)
-boton_buscar = ttk.Button(ventana, text="Buscar", command=buscar_registro)
-boton_buscar.grid(row=0, column=5, padx=5, pady=5)
 
 # Actualizar la lista inicial de participantes
 actualizar_lista()
