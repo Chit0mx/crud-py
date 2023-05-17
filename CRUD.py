@@ -3,7 +3,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import ttk
 
-
+import random
 import sqlite3
 
 from reportlab.pdfgen import canvas
@@ -319,6 +319,68 @@ def generar_reconocimiento():
 
     messagebox.showinfo("Éxito", f"Reconocimiento generado correctamente. Se guardó como {nombre_archivo}.")
 
+def puesto_concurso(puesto):
+    if(puesto==1):
+        return "Primer Lugar"
+    elif(puesto==2):
+        return "Segundo Lugar"
+    elif(puesto==2):
+        return "Segundo Lugar"
+    else:
+        return f"{puesto}° Lugar"
+
+def generar_reconocimiento_lugares():
+    # Obtener el índice seleccionado de la lista
+    indice = lista.curselection()
+    if not indice:
+        messagebox.showwarning("Advertencia", "Selecciona un participante de la lista.")
+        return
+
+    # Obtener los datos del participante seleccionado
+    participante_seleccionado = lista.get(indice)
+    puesto = random.randint(1,3)
+    txt_puesto = puesto_concurso(puesto)
+    # Crear el nombre del archivo PDF
+    nombre_archivo = f"Reconocimiento_{participante_seleccionado[1]}_{participante_seleccionado[2]}_{txt_puesto}.pdf"
+
+    # Crear el documento PDF
+    c = canvas.Canvas(nombre_archivo, pagesize=letter)
+
+    # Definir el estilo de la página
+    c.setFillColor(colors.coral)
+    c.rect(0, 0, letter[0], letter[1], fill=True)
+
+    # Agregar el título
+    c.setFont("Helvetica-Bold", 20)
+    c.setFillColor(colors.white)
+    c.drawString(1.5 * inch, 9 * inch, f"Reconocimeinto al {txt_puesto}")
+
+    # Agregar el nombre del participante
+    c.setFont("Helvetica-Bold", 16)
+    c.setFillColor(colors.white)
+    c.drawString(1.5 * inch, 7 * inch, f"Se otorga este reconocimiento a:")
+    c.setFont("Helvetica-Bold", 20)
+    c.setFillColor(colors.black)
+    c.drawString(1.5 * inch, 6 * inch, f"{participante_seleccionado[1]} {participante_seleccionado[2]}")
+
+    # Agregar el mensaje del reconocimiento
+    mensaje = f"Por su destacada participación en el evento, obteniendo el {txt_puesto}"
+    c.setFont("Helvetica", 14)
+    c.setFillColor(colors.black)
+    c.drawString(1.5 * inch, 5 * inch, mensaje)
+
+    # Agregar la firma del organizador
+    firma = "Organización del Evento"
+    c.setFont("Helvetica-Bold", 12)
+    c.setFillColor(colors.black)
+    c.drawString(1.5 * inch, 3 * inch, firma)
+
+    # Guardar y cerrar el documento PDF
+    c.showPage()
+    c.save()
+
+    messagebox.showinfo("Éxito", f"Reconocimiento generado correctamente. Se guardó como {nombre_archivo}.")
+
 def limpiar_campos():
     entry_nombre.delete(0, tk.END)
     entry_apellido_paterno.delete(0, tk.END)
@@ -433,6 +495,9 @@ boton_exportar_docx.grid(row=1, column=2, padx=5, pady=5)
 
 boton_generar_reconocimiento = tk.Button(frame_botones, text="Participación", command=generar_reconocimiento)
 boton_generar_reconocimiento.grid(row=1, column=3, padx=5, pady=5)
+
+boton_generar_reconocimiento = tk.Button(frame_botones, text="Reconocimiento", command=generar_reconocimiento_lugares)
+boton_generar_reconocimiento.grid(row=1, column=4, padx=5, pady=5)
 
 
 # Actualizar la lista inicial de participantes
