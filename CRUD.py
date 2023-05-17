@@ -154,16 +154,36 @@ def buscar_registro():
     # Realizar la consulta a la base de datos
     cursor.execute("SELECT * FROM participantes WHERE nombre LIKE ?", ('%' + nombre_busqueda + '%',))
     registros_encontrados = cursor.fetchall()
-
+    
+    if registros_encontrados == []:
+        messagebox.showinfo("Advertencia", "No se encontraron registros")
+    else:
     # Agregar registros encontrados a la lista
-    for registro in registros_encontrados:
-        lista.insert(tk.END, registro)
+        for registro in registros_encontrados:
+            lista.insert(tk.END, registro)
+
+def precio_boleto(categoria):
+
+    if(categoria=="Novatos"):
+        precio = "$100"
+    elif (categoria=="Avanzados"):
+        precio = "$150"
+    elif (categoria=="Libre"):
+        precio = "$200"
+    else:
+        precio = "Por determinar"
+
+    return precio
 
 def generar_pdf():
     indice = lista.curselection()
+    if not indice:
+        messagebox.showwarning("Advertencia", "Selecciona un participante de la lista.")
+        return
     if indice:
         participante = lista.get(indice)
         nombre_pdf = f"{participante[0]}_{participante[1]}_{participante[2]}.pdf"
+        precio = precio_boleto(participante[9])
         c = canvas.Canvas(nombre_pdf)
         c.setFont("Helvetica", 12)
         c.drawString(50, 750, "Datos del participante:")
@@ -174,6 +194,7 @@ def generar_pdf():
         c.drawString(50, 620, f"Dirección: {participante[7]}")
         c.drawString(50, 600, f"CURP: {participante[8]}")
         c.drawString(50, 580, f"Categoría: {participante[9]}")
+        c.drawString(50, 560, f"Precio: {precio}")
         c.save()
         messagebox.showinfo("Éxito", "El PDF ha sido generado correctamente.")
 
@@ -187,6 +208,8 @@ def exportar_registro():
     # Obtener los datos del participante seleccionado
     participante_seleccionado = lista.get(indice)
 
+    precio = precio_boleto(participante_seleccionado[9])
+
     # Crear el contenido del archivo de texto
     contenido = f"Nombre: {participante_seleccionado[1]}\n"
     contenido += f"Apellido Paterno: {participante_seleccionado[2]}\n"
@@ -196,7 +219,8 @@ def exportar_registro():
     contenido += f"Escuela: {participante_seleccionado[6]}\n"
     contenido += f"Dirección: {participante_seleccionado[7]}\n"
     contenido += f"CURP: {participante_seleccionado[8]}\n"
-    contenido += f"Categoría: {participante_seleccionado[9]}"
+    contenido += f"Categoría: {participante_seleccionado[9]}\n"
+    contenido += f"Precio: {precio}"
 
     # Guardar el archivo de texto
     archivo = filedialog.asksaveasfile(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
@@ -218,7 +242,7 @@ def exportar_registro_docx():
 
     # Obtener los datos del participante seleccionado
     participante_seleccionado = lista.get(indice)
-
+    precio = precio_boleto(participante_seleccionado[9])
     # Crear un nuevo documento de Word
     doc = Document()
 
@@ -232,6 +256,7 @@ def exportar_registro_docx():
     doc.add_paragraph(f"Dirección: {participante_seleccionado[7]}")
     doc.add_paragraph(f"CURP: {participante_seleccionado[8]}")
     doc.add_paragraph(f"Categoría: {participante_seleccionado[9]}")
+    doc.add_paragraph(f"Precio: {precio}")
 
     # Guardar el archivo DOCX
     archivo = filedialog.asksaveasfile(defaultextension=".docx", filetypes=[("Archivos de Word", "*.docx")])
@@ -318,7 +343,7 @@ ventana.title("Concurso")
 
 #Frame de busqueda y listado
 frame_lista = tk.Frame(ventana)
-frame_lista.grid(row=0, column=6, columnspan=9, padx=5, pady=5)
+frame_lista.grid(row=10, column=0, columnspan=9, padx=5, pady=5)
 
 # Crear la etiqueta y el campo de búsqueda
 entry_buscar = tk.Entry(frame_lista)
